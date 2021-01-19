@@ -34,4 +34,5 @@ if __name__ == '__main__':
     print("-------------------------")
     
 
+
 ######취약점 조치2 - C:\Windows\system32\config\SAM파일 우클릭 > 속성 > 보안탭에서 Administrator, System 그룹외 다른 사용자 삭제######

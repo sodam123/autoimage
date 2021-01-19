@@ -10,10 +10,10 @@ from subprocess import Popen
 ######취약점 조치1 - ncpa.cpl실행 > NetBIOS over TCP/IP 사용안함으로 설정(기본값: 0 사용함: 1 사용안함 2)########
 
 #한줄 명령어 코드#
-"""
+
 netBios_unable = '(Get-WmiObject Win32_NetworkAdapterConfiguration -Filter IpEnabled="true").SetTcpipNetbios(2)'
 subprocess.call(["powershell",netBios_unable],shell = True)
-"""
+
 
 def run(cmd):
     completed = subprocess.run(["powershell","-ExecutionPolicy","Bypass",cmd], shell = True)#stdout = subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)

@@ -30,7 +30,6 @@ Foreach($ele in $a){
     $b,$c = $ele.IdentityReference.Value.split("\")
     write($c)
     if(($c -ne "SYSTEM") -and ($c -ne "Administrator") -and ($c -ne "Administrators")){
-        #icacls $filename /grant "$c :(OI)(CI)(F)"
         #icacls $filepath /inheritance:d
         icacls $filepath /remove "$c"
         write($c + " REMOVED!")

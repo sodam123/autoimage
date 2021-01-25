@@ -32,8 +32,8 @@ if __name__ == '__main__':
     print("-------------------------")
     
 """
-
-######취약점 조치2 - C:\Windows\system32\config\SAM파일 우클릭 > 속성 > 보안탭에서 Administrator, System 그룹외 다른 사용자 삭제######
+"""
+######취약점 조치2(완료) - C:\Windows\system32\config\SAM파일 우클릭 > 속성 > 보안탭에서 Administrator, System 그룹외 다른 사용자 삭제######
 
 if __name__ == '__main__':
 
@@ -49,6 +49,8 @@ if __name__ == '__main__':
     
     print("-------------------------")
 
+
+"""
 
 """
 ######취약점 조치3(완료) - 로컬보안 정책 > 보안 옵션 > SAM계정 옵션 모두 사용으로 설정######
@@ -100,7 +102,21 @@ if __name__ == '__main__':
     print("-------------------------")
 
 """
-######취약점 조치5 - 445포트 오픈 후 바로 차단 > 445포트 없음 확인######
+######취약점 조치5(완료) - 445포트 오픈 후 바로 차단 > 445포트 없음 확인######
+
+if __name__ == '__main__':
+
+    tmp = os.getcwd()
+    filepath = tmp + "\\banport.ps1"
+    banport_info = run(filepath)
+    
+    
+    if banport_info.returncode != 0:
+        print("An error occured: %s", banport_info.stderr)
+    else:
+        print("취약점 조치5 command executed successfully!")
+    
+    print("-------------------------")
 
 
 """

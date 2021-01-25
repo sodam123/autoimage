@@ -14,6 +14,14 @@ base_path = "http://14.63.164.24/epc_repo/template_utils/Windows"
 win_path = "http://14.63.164.24/epc_repo/window-init-script/init-script-executor"
 initscr_path = "C:\\Windows\\Setup"
 
+win_2012_std_scripts = ['[Startup]\n',
+                        '0CmdLine=C:\Windows\Setup\Scripts\SetupComplete.cmd\n',
+                        '0Parameters=\n',
+                        '1CmdLine=C:\Windows\Setup\Scripts\window2012std_init_script.bat\n',
+                        '1Parameters=\n',
+                        '2CmdLine=C:\Windows\Setup\Scripts\WindowsUserdataExecutor_powershell.bat\n',
+                        '2Parameters=\n']
+
 def run(cmd):
     completed = subprocess.run(["powershell","-ExecutionPolicy","Bypass",cmd], shell = True)#stdout = subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
     return completed
@@ -27,6 +35,12 @@ def make_dir(name) :
     else:
         print("already existed")
 
+def file_exist_check(front,end):
+
+    if(os.path.isfile(front + "/" + end)):
+        os.remove(front + "/" + end)
+        print("REMOVE " + end)
+        
 
 def userdataExcutor() :
 
@@ -34,26 +48,18 @@ def userdataExcutor() :
     uni_pathp = "/UserDataExecutor/uerdataexecutor.ps1"
 
     dest_path = "C:/Windows/Setup/Scripts"
-    fpath_bat = "/WindowsUserdataExecutor_powershell.bat"
-    fpath_ps = "/uerdataexecutor.ps1"
 
     file_name1 = "WindowsUserdataExecutor_powershell.bat"
     file_name2 = "uerdataexecutor.ps1"
 
-    if(os.path.isfile(dest_path + fpath_bat)):
-        os.remove(dest_path + fpath_bat)
-        print("REMOVE " + file_name1)
-    
-    if(os.path.isfile(dest_path + fpath_ps)):
-        os.remove(dest_path + fpath_ps)
-        print("REMOVE " + file_name2)
+    file_exist_check(dest_path,file_name1)
+    file_exist_check(dest_path,file_name2)
 
     
     urls_bat = base_path + uni_pathb
     urls_ps = base_path + uni_pathp
 
     wget.download(urls_bat, dest_path)
-
     print(" GET " + file_name1)
     time.sleep(1)
     wget.download(urls_ps, dest_path)
@@ -69,6 +75,8 @@ def timeSetting() :
     uni_path = "/timeSetting/timeSetting.bat"
     dest_path = 'C:/Windows'
     file_name = 'timeSetting.bat'
+
+    file_exist_check(dest_path,file_name)
 
     wget.download(base_path + uni_path, dest_path)
     print(" GET ",file_name)
@@ -92,6 +100,8 @@ def synctime() :
     dest_path = 'C:/ProgramData/Microsoft/Windows/Start Menu/Programs/Startup'
     file_name = 'time.bat'
 
+    file_exist_check(dest_path,file_name)
+
     wget.download(base_path + uni_path, dest_path)
     print(" GET ",file_name)
 
@@ -107,6 +117,8 @@ def scr_init() :
     dest_path = 'C:/Windows/Setup/scripts'
     file_name = 'SetupComplete.cmd'
     
+    file_exist_check(dest_path,file_name)
+
     wget.download(base_path + uni_path, dest_path)
     print(" GET ",file_name)
     #make_dir(first_path)
@@ -143,7 +155,7 @@ def check_os(os_name):
 
         #os_fullname = platform.platform()[0:12]
         os_fullname = get_os_name()
-
+        scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
         print("**" + os_fullname)
         if os_fullname == "Windows Server 2012 Standard":
             #print(os_fullname)
@@ -151,23 +163,60 @@ def check_os(os_name):
             uni_path = "/window2012std_init_script.bat"
             dest_path = 'C:/Windows/Setup/Scripts'
             file_name = 'window2012std_init_script.bat'
+
+            """
+            if(os.path.isfile(dest_path + "/" + file_name)):
+                os.remove(dest_path + "/" + file_name)
+                print("REMOVE " + file_name)
+            """
+
+            file_exist_check(dest_path,file_name)
+
             wget.download(win_path + uni_path, dest_path)
             print(" GET ",file_name)
 
+            file_exist_check(scr_path,"scripts.ini")
+            fo = open(scr_path + "/" + "scripts.ini","w")
+            fo.writelines(win_2012_std_scripts)
+            fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+            fo.close()
 
         elif os_fullname == "Windows Server 2012 R2 Standard":
             print(os_fullname)
+            uni_path = "/window2012r2_init_script.bat"
+            dest_path = 'C:/Windows/Setup/Scripts'
+            file_name = 'window2012r2_init_script.bat'
+            wget.download(win_path + uni_path, dest_path)
+            print(" GET ",file_name)
 
         elif os_fullname == "Windows Server 2016 Standard":
             print(os_fullname)
+            uni_path = "/window2016std_init_script.bat"
+            dest_path = 'C:/Windows/Setup/Scripts'
+            file_name = 'window2016std_init_script.bat'
+            wget.download(win_path + uni_path, dest_path)
+            print(" GET ",file_name)
         
         elif os_fullname == "Windows Serer 2019 Standard":
             print(os_fullname)
+            uni_path = "/window2019std_init_script.bat"
+            dest_path = 'C:/Windows/Setup/Scripts'
+            file_name = 'window2019std_init_script.bat'
+            wget.download(win_path + uni_path, dest_path)
+            print(" GET ",file_name)
 
     #elif os_name == "Ubuntu":
 
     #elif os_name == "CentOS":
 
+
+def reg_initScript():
+
+    tmp = os.getcwd()
+    filepath = tmp + "\\regScript.ps1"
+    regScript_info = run(filepath)
+    #regScript_info = subprocess.run(["cmd","-ExecutionPolicy","Bypass",filepath], shell = True)#stdout = subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 
 if __name__ == "__main__":
 
@@ -175,7 +224,7 @@ if __name__ == "__main__":
 
     make_dir(initscr_path + '\Scripts')
 
-    check_os(platform.system())
+    os_name = platform.system() 
 
     #_os = platform.platform()[0:12]
     #print(_os)
@@ -186,4 +235,5 @@ if __name__ == "__main__":
     #synctime()
     #check_firewall()
     #scr_init()
-    #windowinitscr()
+    check_os(os_name)
+    #reg_initScript()

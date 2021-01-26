@@ -13,7 +13,8 @@ from winScriptList import win_2012_std_scripts_mssql, win_2012_r2_std_scripts_ms
 
 
 os_name = platform.system()
-mssql_name = platform.system() ##수정필요
+mssql_name = "" ##수정필요
+check_mssql = ""
 
 original_url = "http://mirror.g.ucloudbiz.com"
 
@@ -43,13 +44,19 @@ def file_exist_check(front,end):
         
 def get_os_name():
 
-    """
+    
     tmp = os.getcwd()
     filepath = tmp + "\\osName.ps1"
     osName_info = run(filepath)
 
-    return osName_info
+    
+    with open("C:/test.txt",'r') as fp:
+        mssql_name = fp.read().splitlines()
+    
+    check_mssql = mssql_name[0]
 
+    return osName_info
+    
     """
     key = reg.HKEY_LOCAL_MACHINE
     key_value = "Software\Microsoft\Windows NT\CurrentVersion"
@@ -66,6 +73,7 @@ def get_os_name():
     reg.CloseKey(open)
 
     return value
+    """
 
 def Copy_UerdataExcutor() :
 
@@ -434,12 +442,26 @@ if __name__ == "__main__":
 
     make_dir(initscr_path + '\Scripts')
  
-
     #_os = platform.platform()[0:12]
     #print(_os)
+    _os = get_os_name()
+    print(_os.returncode)
 
-    #if "SQL server" :
+    if check_mssql == "null" : ## **Windows** ##
     
+        print("Window")
+        #Copy_UerdataExcutor()
+        #Copy_And_Execute_TimeSettingScript()
+        #Copy_SynctimeScript
+        #Check_Firewall()
+        #Copy_InitScript()
+        #Copy_WinInitScript(os_name)
+        #Register_Script(os_name)
+        #Sysprep()
+
+    else : ## **Windows + Mssql** ##
+        
+        print("Window + Mssql")
         #make_dir('C:/Windows/mssql')
         #Copy_And_Register_AutoExecScript(mssql_name)
         #Copy_UerdataExcutor()
@@ -448,14 +470,4 @@ if __name__ == "__main__":
         #Register_Script_Mssql(os_name)
         #Stop_Cloud_Service()
         #Copy_Mssql_Install_Check_File()
-        #Sysprep()
-
-    #else :
-        #Copy_UerdataExcutor()
-        #Copy_And_Execute_TimeSettingScript()
-        #Copy_SynctimeScript
-        #Check_Firewall()
-        #Copy_InitScript()
-        #Copy_WinInitScript(os_name)
-        #Register_Script(os_name)
         #Sysprep()

@@ -1,3 +1,1 @@
-import-module GroupPolicy-verbose
-$res = Get-Command -Module GroupPolicy
-$res
+Stop-Service -Name "Cloud.com Instance Manager"

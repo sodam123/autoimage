@@ -12,9 +12,9 @@ from winScriptList import win_2012_std_scripts, win_2012_r2_std_scripts, win_201
 from winScriptList import win_2012_std_scripts_mssql, win_2012_r2_std_scripts_mssql, win_2016_std_scripts_mssql, win_2019_std_scripts_mssql
 
 
-os_name = platform.system()
-mssql_name = "" ##수정필요
-check_mssql = ""
+os_name = ""
+mssql_name = []
+mssql_version = mssql_edition = "null"
 
 original_url = "http://mirror.g.ucloudbiz.com"
 
@@ -42,22 +42,8 @@ def file_exist_check(front,end):
         os.remove(front + "/" + end)
         print("REMOVE " + end)
         
-def get_os_name():
-
+def get_winos_fullname():
     
-    tmp = os.getcwd()
-    filepath = tmp + "\\osName.ps1"
-    osName_info = run(filepath)
-
-    
-    with open("C:/test.txt",'r') as fp:
-        mssql_name = fp.read().splitlines()
-    
-    check_mssql = mssql_name[0]
-
-    return osName_info
-    
-    """
     key = reg.HKEY_LOCAL_MACHINE
     key_value = "Software\Microsoft\Windows NT\CurrentVersion"
 
@@ -73,8 +59,19 @@ def get_os_name():
     reg.CloseKey(open)
 
     return value
-    """
 
+def check_mssql() :
+
+    tmp = os.getcwd()
+    filepath = tmp + "\\checkSQL.ps1"
+    checkSQL_info = run(filepath)
+
+    with open("C:/test.txt",'r') as fp:
+        mssql_name = fp.read().splitlines()
+    
+    mssql_version = mssql_name[0]
+    mssql_edition = mssql_name[1]
+    
 def Copy_UerdataExcutor() :
 
     uni_pathb = "/UserDataExecutor/WindowsUserdataExecutor_powershell.bat"
@@ -164,7 +161,7 @@ def Copy_WinInitScript(os_name):
     if os_name == "Windows":
 
         #os_fullname = platform.platform()[0:12]
-        os_fullname = get_os_name()
+        os_fullname = get_winos_fullname()
 
         if os_fullname == "Windows Server 2012 Standard" :
             #print(os_fullname)
@@ -215,7 +212,7 @@ def Copy_WinInitScript(os_name):
 
 def Register_Script(os_name):
 
-    os_fullname = get_os_name()
+    os_fullname = get_winos_fullname()
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
 
     if os_fullname == "Windows Server 2012 Standard" :
@@ -257,7 +254,7 @@ def Register_Script(os_name):
 
 def Register_Script_Mssql(os_name):
 
-    os_fullname = get_os_name()
+    os_fullname = get_winos_fullname()
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
 
     if os_fullname == "Windows Server 2012 Standard" :
@@ -388,7 +385,7 @@ def Sysprep() :
 
     if os_name == "Windows" :
 
-        os_fullname = get_os_name()
+        os_fullname = get_winos_fullname()
 
         if os_fullname == "Windows Server 2012 Standard" :
 
@@ -436,38 +433,125 @@ def Sysprep() :
             print(" GET ",file_name)
 
 
+def ubuntu_setting() :
+
+    subprocess.call('chmod 400 /etc/shadow')
+    subprocess.call('chown root /etc/shadow')
+
+    subprocess.call('chmod -s /usr/bin/newgrp')
+    subprocess.call('chmod -s /sbin/unix_chkpwd')
+    subprocess.call('chmod -s /usr/bin/at')
+
+
+    base_path = "http://14.63.164.24/epc_repo"
+    dest_path = '/etc/init.d'
+    file_name1 = 'epc-init-script.sh'
+    file_name2 = 'userdataExecutor.sh'
+
+
+    file_exist_check(dest_path,file_name1)
+
+    wget.download(base_path + "/epc-init-script" + "/" + file_name1 + ".bak2" , dest_path)
+    os.rename(dest_path + "/epc-init-script.sh.bak2", dest_path + "/" + file_name1)
+    print(" GET ", file_name1)
+
+    time.sleep(1)
+
+    file_exist_check(dest_path,file_name2)
+    wget.download(base_path + "/userdataExecutor" + "/" + file_name2 , dest_path)
+    print(" GET ", file_name2)
+
+    subprocess.call('chmod 755 /etc/init.d/' + file_name1)
+    subprocess.call('chmod 755 /etc/init.d/' + file_name2)
+
+    #####rc.local에서 실행후 clean up작업 해야됨#####
+
+def centos_setting() :
+
+    subprocess.call('chmod 755 /usr/bin/newgrp')
+    subprocess.call('chmod 755 /sbin/unix_chkpwd')
+
+    base_path = "http://14.63.164.24/epc_repo"
+    dest_path = '/etc/init.d'
+    file_name1 = 'epc-init-script-v2.sh'
+    file_name2 = 'sethostname.sh'
+    file_name3 = 'userdataExecutor.sh'
+
+
+    file_exist_check(dest_path,file_name1)
+    wget.download(base_path + "/epc-init-script" + "/" + file_name1 , dest_path)
+    print(" GET ", file_name1)
+
+    time.sleep(1)
+
+    file_exist_check(dest_path,file_name2)
+    wget.download(base_path + "/sethostname" + "/" + file_name2 , dest_path)
+    print(" GET ", file_name2)
+
+    time.sleep(1)
+
+    file_exist_check(dest_path,file_name3)
+    wget.download(base_path + "/userdataExecutor" + "/" + file_name3 , dest_path)
+    print(" GET ", file_name3)
+
+    subprocess.call('chmod 755 /etc/init.d/epc-init-script-v2.sh')
+    subprocess.call('chmod 755 /etc/init.d/sethostname.sh')
+    subprocess.call('chmod 755 /etc/init.d/userdataExecutor')
+
+     #####rc.local에서 실행후 clean up작업 해야됨#####
+
 if __name__ == "__main__":
 
-
-
-    make_dir(initscr_path + '\Scripts')
  
     #_os = platform.platform()[0:12]
     #print(_os)
-    _os = get_os_name()
-    print(_os.returncode)
 
-    if check_mssql == "null" : ## **Windows** ##
-    
-        print("Window")
-        #Copy_UerdataExcutor()
-        #Copy_And_Execute_TimeSettingScript()
-        #Copy_SynctimeScript
-        #Check_Firewall()
-        #Copy_InitScript()
-        #Copy_WinInitScript(os_name)
-        #Register_Script(os_name)
-        #Sysprep()
+    os_name = platform.system()
+    check_mssql()
 
-    else : ## **Windows + Mssql** ##
+    if os_name == "Windows" :
+
+        make_dir(initscr_path + '\Scripts')
         
-        print("Window + Mssql")
-        #make_dir('C:/Windows/mssql')
-        #Copy_And_Register_AutoExecScript(mssql_name)
-        #Copy_UerdataExcutor()
-        #Copy_InitScript()
-        #Copy_WinInitScript(os_name)
-        #Register_Script_Mssql(os_name)
-        #Stop_Cloud_Service()
-        #Copy_Mssql_Install_Check_File()
-        #Sysprep()
+        print(mssql_version)
+        print(mssql_edition)
+
+        if mssql_version == "null" : ## **NOT MSSQL** ##
+        
+            print("Window")
+            #Copy_UerdataExcutor()
+            #Copy_And_Execute_TimeSettingScript()
+            #Copy_SynctimeScript
+            #Check_Firewall()
+            #Copy_InitScript()
+            #Copy_WinInitScript(os_name)
+            #Register_Script(os_name)
+            #Sysprep()
+
+        else : ## **MSSQL** ##
+            
+            print("Window + Mssql")
+            make_dir('C:/Windows/mssql')
+
+            Copy_And_Register_AutoExecScript(mssql_name)
+            Copy_UerdataExcutor()
+            Copy_And_Execute_TimeSettingScript()
+            Copy_SynctimeScript
+            Check_Firewall()
+            Copy_InitScript()
+            Copy_WinInitScript(os_name)
+            Register_Script_Mssql(os_name)
+            Stop_Cloud_Service()
+            Copy_Mssql_Install_Check_File()
+            Sysprep()
+
+
+    elif os_name == "Ubuntu" : ##우분투 Linux##
+
+        ubuntu_setting()
+
+    elif os_name == "CentOS" :
+
+        centos_setting()
+
+

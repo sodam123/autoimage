@@ -29,7 +29,7 @@ if (Test-Path "HKLM:\Software\Microsoft\Microsoft SQL Server\Instance Names\SQL"
     }
 
     $res = $versionname + "`r`n" + $editionname
-    Set-Content "C:\test.txt" $res
+    Set-Content "C:\mssql_test.txt" $res
 
 }
 
@@ -37,7 +37,7 @@ if (Test-Path "HKLM:\Software\Microsoft\Microsoft SQL Server\Instance Names\SQL"
 else {
 
     write-host("False")
-    Set-Content "C:\test.txt" "null"
+    Set-Content "C:\mssql_test.txt" "null"
 }
 <#
  $osname = (Get-WmiObject Win32_OperatingSystem).Name#.split("|")

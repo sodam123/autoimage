@@ -60,6 +60,7 @@ foreach($ele in $res){
 
    if($ele.LocalPort -eq "445"){
       
+      $ele.LocalPort
       $netBTParametersPath = "HKLM:\SYSTEM\CurrentControlSet\Services\NetBT\Parameters" 
       if(Test-Path -Path $netBTParametersPath) { 
          Set-ItemProperty -Path $netBTParametersPath -Name "SMBDeviceEnabled" -Value 0 

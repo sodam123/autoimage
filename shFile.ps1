@@ -1,3 +1,6 @@
+Set-Service -Name "LanmanServer" -StartupType Automatic
+Start-Service -Name "LanmanServer"
+
 $share = Get-SmbShare
 
 Foreach($sh in $share){
@@ -7,3 +10,4 @@ Foreach($sh in $share){
         #write-Host($sh.Name)
     }
 }
+

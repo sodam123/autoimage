@@ -586,6 +586,7 @@ def download_mssql_Allneed(version, edition):
         
         #print(scf)
         #print(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + scf)
+        file_exist_check(dest_path1 + "/script",scf)
         flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + scf , dest_path1 + "/script")
         if flg == 1 :
             printcmd(" GET " + scf)
@@ -599,6 +600,7 @@ def download_mssql_Allneed(version, edition):
     make_dir(dest_path1 + '/script/kt')    
     for ktf in file_inKT:
 
+        file_exist_check(dest_path1 + "/script/kt",ktf)
         flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/script/kt" + "/" + ktf , dest_path1 + "/script/kt")       
         if flg == 1 :
             printcmd(" GET " + ktf)

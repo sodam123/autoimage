@@ -5,6 +5,7 @@ import platform
 import subprocess
 import wget
 import shutil
+import stat
 import time
 import winreg as reg
 import math
@@ -468,12 +469,23 @@ def Register_Script(os_fullname):
 
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
 
+    if(os.path.isfile(scr_path + "/" + "scripts.ini")) :
+        os.chmod(scr_path + "/" + "scripts.ini", stat.FILE_ATTRIBUTE_NORMAL)
+        os.remove(scr_path + "/" + "scripts.ini")
+    
     if os_fullname == "Windows Server 2012 Standard" :
 
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_std_scripts)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(7)) :
+
+            if e%2 == 0 and e != 0:  
+                printcmd("*" + win_2012_std_scripts[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -484,7 +496,14 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_r2_std_scripts)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(7)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2012_r2_std_scripts[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -495,7 +514,14 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2016_std_scripts)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(7)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2016_std_scripts[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -506,7 +532,14 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2019_std_scripts)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(7)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2019_std_scripts[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -516,17 +549,24 @@ def Register_Script_Mssql(os_fullname):
 
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
 
+    if(os.path.isfile(scr_path + "/" + "scripts.ini")) :
+        os.chmod(scr_path + "/" + "scripts.ini", stat.FILE_ATTRIBUTE_NORMAL)
+        os.remove(scr_path + "/" + "scripts.ini")
+
     if os_fullname == "Windows Server 2012 Standard" :
        
-        file_exist_check(scr_path,"scripts.ini")
+        #file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_std_scripts_mssql)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+        #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_HIDDEN)
+        #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_READONLY)
 
-        for e in tqdm(range(8)) :
+        for e in tqdm(range(9)) :
 
-            if e%2 == 1:  
-                print("*" + win_2012_r2_std_scripts_mssql[e] + "- 등록 완료")
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2012_std_scripts_mssql[e] + "- 등록 완료")
                 time.sleep(1)
 
         fo.close()
@@ -538,7 +578,14 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_r2_std_scripts_mssql)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(9)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2012_r2_std_scripts_mssql[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -549,7 +596,14 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2016_std_scripts_mssql)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(9)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2016_std_scripts_mssql[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -560,7 +614,14 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2019_std_scripts_mssql)
+        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
+
+        for e in tqdm(range(9)) :
+
+            if e%2 == 0 and e != 0:
+                printcmd("*" + win_2019_std_scripts_mssql[e] + "- 등록 완료")
+                time.sleep(1)
 
         fo.close()
 
@@ -915,14 +976,39 @@ if __name__ == "__main__":
         
             print("******Window******")
 
-            #Copy_UerdataExcutor()
-            #Copy_And_Execute_TimeSettingScript()
-            #Copy_SynctimeScript
-            #Check_Firewall()
-            #Copy_InitScript()
-            #Copy_WinInitScript(os_fullname)
-            #Register_Script(os_fullname)
-            #Sysprep(os_fullname)
+            print("Loading...")
+            time.sleep(1.5)
+            Copy_UerdataExcutor()
+
+            print("Loading...")
+            time.sleep(1.5)
+            Copy_And_Execute_TimeSettingScript()
+
+            print("Loading...")
+            time.sleep(1.5)
+            Copy_SynctimeScript()
+            
+            print("Loading...")
+            time.sleep(1.5)
+            Check_Firewall()
+
+            print("Loading...")
+            time.sleep(1.5)
+            Copy_InitScript()
+
+            print("Loading...")
+            time.sleep(1.5)
+            Copy_WinInitScript(os_fullname)
+
+            print("Loading...")
+            time.sleep(1.5)
+            Register_Script(os_fullname)
+
+            print("Loading...")
+            time.sleep(1.5)
+            Sysprep(os_fullname)
+            printcmd(">> Sysprep 실행이 종료되었습니다.")
+
 
         else : ## **MSSQL** ##
             

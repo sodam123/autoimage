@@ -468,17 +468,12 @@ def Copy_WinInitScript(os_fullname):
 def Register_Script(os_fullname):
 
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
-
-    if(os.path.isfile(scr_path + "/" + "scripts.ini")) :
-        os.chmod(scr_path + "/" + "scripts.ini", stat.FILE_ATTRIBUTE_NORMAL)
-        os.remove(scr_path + "/" + "scripts.ini")
     
     if os_fullname == "Windows Server 2012 Standard" :
 
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_std_scripts)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(7)) :
@@ -496,7 +491,6 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_r2_std_scripts)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(7)) :
@@ -514,7 +508,6 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2016_std_scripts)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(7)) :
@@ -532,7 +525,6 @@ def Register_Script(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2019_std_scripts)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(7)) :
@@ -549,16 +541,11 @@ def Register_Script_Mssql(os_fullname):
 
     scr_path = "C:/Windows/System32/GroupPolicy/Machine/Scripts"
 
-    if(os.path.isfile(scr_path + "/" + "scripts.ini")) :
-        os.chmod(scr_path + "/" + "scripts.ini", stat.FILE_ATTRIBUTE_NORMAL)
-        os.remove(scr_path + "/" + "scripts.ini")
-
     if os_fullname == "Windows Server 2012 Standard" :
        
-        #file_exist_check(scr_path,"scripts.ini")
+        file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_std_scripts_mssql)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
         #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_HIDDEN)
         #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_READONLY)
@@ -578,7 +565,6 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_r2_std_scripts_mssql)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(9)) :
@@ -596,7 +582,6 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2016_std_scripts_mssql)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(9)) :
@@ -614,7 +599,6 @@ def Register_Script_Mssql(os_fullname):
         file_exist_check(scr_path,"scripts.ini")
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2019_std_scripts_mssql)
-        fo = os.popen('attrib +r ' + scr_path + "/" + "scripts.ini")
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         for e in tqdm(range(9)) :

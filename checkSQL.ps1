@@ -9,7 +9,7 @@ if (Test-Path "HKLM:\Software\Microsoft\Microsoft SQL Server\Instance Names\SQL"
     $p = $var.sysprep
     $editionname = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\$p\Setup").Edition
     $ver = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\$p\Setup").Version    
-
+    
     switch -wildcard($ver){
 
         "15*" {$versionname = "SQL Server 2019";}
@@ -28,6 +28,10 @@ if (Test-Path "HKLM:\Software\Microsoft\Microsoft SQL Server\Instance Names\SQL"
         default {$versionname = "null";}
     }
 
+    $ver
+    $versionname
+    $editionname
+
     $res = $versionname + "`r`n" + $editionname
     Set-Content "C:\mssql_test.txt" $res
 
@@ -37,7 +41,7 @@ if (Test-Path "HKLM:\Software\Microsoft\Microsoft SQL Server\Instance Names\SQL"
 else {
 
     write-host("False")
-    Set-Content "C:\mssql_test.txt" "null"
+    Set-Content "C:\mssql_test.txt" "null`r`nnull"
 }
 <#
  $osname = (Get-WmiObject Win32_OperatingSystem).Name#.split("|")

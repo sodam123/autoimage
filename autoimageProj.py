@@ -8,6 +8,7 @@ import shutil
 import time
 import winreg as reg
 import math
+import logging
 from tqdm import tqdm
 from subprocess import Popen
 from winScriptList import win_2012_std_scripts, win_2012_r2_std_scripts, win_2016_std_scripts, win_2019_std_scripts
@@ -24,6 +25,32 @@ base_path = "http://14.63.164.24/epc_repo/template_utils/Windows"
 win_path = "http://14.63.164.24/epc_repo/window-init-script/init-script-executor"
 initscr_path = "C:\\Windows\\Setup"
 
+if(os.path.isfile(os.getcwd() + "/" + "my.log")):
+    os.remove(os.getcwd() + "/" + "my.log")
+
+txtlog = open(os.getcwd() + "/my.log",'w') 
+
+def get_log():
+
+    mylogger = logging.getLogger("my")
+
+    if len(mylogger.handlers) > 0:
+        return mylogger
+
+    mylogger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    file_handler = logging.FileHandler('my.log')
+    file_handler.setFormatter(formatter)
+    #file_handler.setLevel(logging.DEBUG)
+    mylogger.addHandler(file_handler)
+
+    #stream_hander = logging.StreamHandler()
+    #mylogger.addHandler(stream_hander)
+
+    return mylogger
+
 def bar_custom(current, total, width=80):
     width=30
     avail_dots = width-2
@@ -33,8 +60,25 @@ def bar_custom(current, total, width=80):
     return progress
 
 def run(cmd):
-    completed = subprocess.run(["powershell","-ExecutionPolicy","Bypass",cmd], shell = True)#stdout = subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    completed = subprocess.run(["powershell","-ExecutionPolicy","Bypass",cmd], shell = True, stdout = txtlog)#stdout = subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+    #completed = subprocess.Popen(["powershell.exe","-ExecutionPolicy","Bypass",cmd],stdout = sys.stdout)
+    #completed.communicate()
     return completed
+
+def printcmd(pstr) :
+
+    print(pstr)
+
+    my = get_log()
+    my.debug(pstr)
+
+def wgets(pathcmd,destcmd) :
+
+    try:
+        wget.download(pathcmd,destcmd, bar = bar_custom)
+        return 1
+    except:
+        return 0
 
 ######취약점 조치1(완료) - ncpa.cpl실행 > NetBIOS over TCP/IP 사용안함으로 설정(기본값: 0 사용함: 1 사용안함 2)########
 
@@ -48,16 +92,17 @@ subprocess.call(["powershell",netBios_unable],shell = True)
 
 def netBios_TCPIP_Off():
 
+    my = get_log()
     tmp = os.getcwd()
     filepath = tmp + "\\netBios.ps1"
     netBios_info = run(filepath)
     
-    
+    #print(netBios_info.stdout.read)
     if netBios_info.returncode != 0:
-        print("An error occured: %s", netBios_info.stderr)
+        printcmd("An error occured: " + netBios_info.stderr)
     else:
         #print("취약점 조치1 command executed successfully!")
-        print("> 'NetBIOS over TCP/IP' -> '사용안함' 으로 설정되었습니다.")
+        printcmd(">> 'NetBIOS over TCP/IP' -> '사용안함' 으로 설정되었습니다.")
         
     time.sleep(1.5)
     #print("=======================================================================")
@@ -74,10 +119,10 @@ def SAM_rmUser():
     
     
     if user_info.returncode != 0:
-        print("An error occured: %s", user_info.stderr)
+        printcmd("An error occured: " + user_info.stderr)
     else:
         #print("취약점 조치2 command executed successfully!")
-        print("> SAM파일 내 불필요한 사용자 그룹이 모두 삭제되었습니다.")
+        printcmd(">> SAM파일 내 불필요한 사용자 그룹이 모두 삭제되었습니다.")
     
     time.sleep(1.5)
     #print("-------------------------")
@@ -96,12 +141,12 @@ def SAM_accPolicy_On():
     
     
     if sam_info.returncode != 0:
-        print("An error occured: %s", sam_info.stderr)
+        printcmd("An error occured: " + sam_info.stderr)
     else:
         #print("취약점 조치3 command executed successfully!")
-        print("> 'SAM 계정과 공유의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
+        printcmd(">> 'SAM 계정과 공유의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
         time.sleep(1.5)
-        print("> 'SAM 계정의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
+        printcmd(">> 'SAM 계정의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
     
     time.sleep(1.5)
     #print("-------------------------")
@@ -120,10 +165,10 @@ def stopShare():
     
     
     if shFile_info.returncode != 0:
-        print("An error occured: %s", shFile_info.stderr)
+        printcmd("An error occured: " + shFile_info.stderr)
     else:
         #print("취약점 조치4-1 command executed successfully!")
-        print("> 공유 폴더 내 불필요한 공유 설정이 모두 중지되었습니다.")
+        printcmd(">> 공유 폴더 내 불필요한 공유 설정이 모두 중지되었습니다.")
 
     time.sleep(1.5)
     #print("-------------------------")
@@ -133,10 +178,10 @@ def stopShare():
     reg_info = subprocess.run(assReg, stdout = subprocess.PIPE)
     
     if reg_info.returncode != 0:
-        print("An error occured: %s", reg_info.stderr)
+        printcmd("An error occured: " + reg_info.stderr)
     else:
         #print("취약점 조치4-2 command executed successfully!")
-        print("> AutoShareServer 레지스트리 값이 0으로 설정되었습니다.")
+        printcmd(">> AutoShareServer 레지스트리 값이 0으로 설정되었습니다.")
 
     time.sleep(1.5)
     #print("-------------------------")
@@ -154,10 +199,10 @@ def stop445port():
     
     
     if banport_info.returncode != 0:
-        print("An error occured: %s", banport_info.stderr)
+        printcmd("An error occured: " + banport_info.stderr)
     else:
         #print("취약점 조치5 command executed successfully!")
-        print("> 445포트 차단 조치가 완료되었습니다.(재부팅시 포트 차단 완료)")
+        printcmd(">> 445포트 차단 조치가 완료되었습니다.(재부팅시 포트 차단 완료)")
 
     time.sleep(1.5)
     #print("-------------------------")
@@ -174,10 +219,10 @@ def addEnabledReg() :
     
     
     if addReg_info.returncode != 0:
-        print("An error occured: %s", addReg_info.stderr)
+        printcmd("An error occured: " + addReg_info.stderr)
     else:
         #print("취약점 조치6 command executed successfully!")
-        print("> 프로토콜 레지스트리와 취약 알고리즘 레지스트리가 모두 비활성되었습니다.")
+        printcmd(">> 프로토콜 레지스트리와 취약 알고리즘 레지스트리가 모두 비활성되었습니다.")
     
     time.sleep(1.5)
     #print("-------------------------")
@@ -246,22 +291,36 @@ def Copy_UerdataExcutor() :
     file_exist_check(dest_path,file_name1)
     file_exist_check(dest_path,file_name2)
 
-    
     urls_bat = base_path + uni_pathb
     urls_ps = base_path + uni_pathp
 
-    wget.download(urls_bat, dest_path, bar = bar_custom)
-    print(" GET " + file_name1)
+    check_flag = 1
 
+    flg = wgets(urls_bat, dest_path)
+    
+    if flg == 1:
+        printcmd(" GET " + file_name1)
+
+    else:
+        printcmd("ERROR : " + file_name1 + "파일을 다운로드하지 못했습니다.")
+
+    check_flag &= flg
     time.sleep(1)
 
-    wget.download(urls_ps, dest_path, bar = bar_custom)
-    print(" GET " + file_name2)
+    flg = wgets(urls_ps, dest_path)
 
-    
-    #copy(dir_file1, dest_path)
-    #copy(dir_file2, dest_path)
-    # os.remove('C:\\Windows\Setup\Scripts\WindowsUserdataExecutor_powershell.bat')
+    if flg == 1:
+        printcmd(" GET " + file_name2)
+
+    else:
+        printcmd("ERROR : " + file_name2 + "파일을 다운로드하지 못했습니다.")
+
+    check_flag &= flg
+
+    if check_flag == 1:    
+        printcmd(">> UserdataExecutor스크립트 파일이 모두 정상적으로 등록되었습니다.")
+    else:
+        printcmd("ERROR : UserdataExecutor스크립트 파일 등록 중 오류가 발생했습니다.")
 
 def Copy_And_Execute_TimeSettingScript() :
 
@@ -271,8 +330,14 @@ def Copy_And_Execute_TimeSettingScript() :
 
     file_exist_check(dest_path,file_name)
 
-    wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-    print(" GET ",file_name)
+    flg = wgets(base_path + uni_path, dest_path)
+    
+    if flg == 1:
+        print(" GET " + file_name)
+        printcmd(">> TimeSetting 스크립트 파일이 정상적으로 등록되었습니다.")
+
+    else:
+        printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
     ######timeSetting.bat파일 1회실행######
     
@@ -280,9 +345,9 @@ def Copy_And_Execute_TimeSettingScript() :
     time_info = subprocess.run([r'C:\\Windows\\timeSetting.bat'])
     
     if(time_info.returncode != 0):
-        print("RUN TimeSetting.bat ERROR")
+        printcmd("RUN TimeSetting.bat ERROR")
     else:
-        print("RUN TimeSetting.bat SUCCESS")
+        printcmd("RUN TimeSetting.bat SUCCESS")
 
 ######SKIP REARM######
 
@@ -297,14 +362,23 @@ def Copy_SynctimeScript() :
 
     file_exist_check(dest_path,file_name)
 
-    wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-    print(" GET ",file_name)
-
+    flg = wgets(base_path + uni_path, dest_path)
+    
+    if flg == 1:
+        printcmd(" GET " + file_name)
+        printcmd(">> Time 동기화 스크립트 파일이 정상적으로 등록되었습니다.")
+    else:
+        printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
 def Check_Firewall() :
 
     fw_info = subprocess.run("netsh advfirewall set allprofiles state off")
 
+    if fw_info.returncode != 0:
+        printcmd("ERROR : 방화벽 설정 에러")
+    
+    else :
+        printcmd(">> 윈도우 방화벽 설정이 모두 OFF로 설정되었습니다.")
 
 def Copy_InitScript() :
 
@@ -314,14 +388,18 @@ def Copy_InitScript() :
     
     file_exist_check(dest_path,file_name)
 
-    wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-    print(" GET ",file_name)
+    flg = wgets(base_path + uni_path, dest_path)
+    
+    if flg == 1:
+        printcmd(" GET " + file_name)
+        printcmd(">> Init 스크립트 파일이 정상적으로 등록되었습니다.")
+    else :
+        printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
 def Copy_WinInitScript(os_fullname):
 
 
     if os_fullname == "Windows Server 2012 Standard" :
-        #print(os_fullname)
 
         uni_path = "/window2012std_init_script.bat"
         dest_path = 'C:/Windows/Setup/Scripts'
@@ -329,38 +407,61 @@ def Copy_WinInitScript(os_fullname):
 
         file_exist_check(dest_path,file_name)
 
-        wget.download(win_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        flg = wgets(win_path + uni_path, dest_path)
+        
+        if flg == 1:
+            printcmd(" GET " + file_name)
+            printcmd(">> WindowInitScript파일이 정상적으로 등록되었습니다.")
+        else :
+            printfcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
     elif os_fullname == "Windows Server 2012 R2 Standard":
-        #print(os_fullname)
         
         uni_path = "/window2012r2_init_script.bat"
         dest_path = 'C:/Windows/Setup/Scripts'
         file_name = 'window2012r2_init_script.bat'
         
-        wget.download(win_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        file_exist_check(dest_path,file_name)
+
+        flg = wgets(win_path + uni_path, dest_path)
+        
+        if flg == 1:
+            printcmd(" GET " + file_name)
+            printcmd(">> WindowInitScript파일이 정상적으로 등록되었습니다.")
+        else :
+            printfcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
     elif os_fullname == "Windows Server 2016 Standard":
-        #print(os_fullname)
         
         uni_path = "/window2016std_init_script.bat"
         dest_path = 'C:/Windows/Setup/Scripts'
         file_name = 'window2016std_init_script.bat'
         
-        wget.download(win_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        file_exist_check(dest_path,file_name)
+
+        flg = wgets(win_path + uni_path, dest_path)
+        
+        if flg == 1:
+            printcmd(" GET " + file_name)
+            printcmd(">> WindowInitScript파일이 정상적으로 등록되었습니다.")
+        else :
+            printfcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
     
     elif os_fullname == "Windows Serer 2019 Standard":
-        #print(os_fullname)
         
         uni_path = "/window2019std_init_script.bat"
         dest_path = 'C:/Windows/Setup/Scripts'
         file_name = 'window2019std_init_script.bat'
         
-        wget.download(win_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        file_exist_check(dest_path,file_name)
+
+        flg = wgets(win_path + uni_path, dest_path)
+        
+        if flg == 1:
+            printcmd(" GET " + file_name)
+            printcmd(">> WindowInitScript파일이 정상적으로 등록되었습니다.")
+        else :
+            printfcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
 
 
 def Register_Script(os_fullname):
@@ -376,6 +477,8 @@ def Register_Script(os_fullname):
 
         fo.close()
 
+        printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
+
     elif os_fullname == "Windows Server 2012 R2 Standard":
         
         file_exist_check(scr_path,"scripts.ini")
@@ -384,6 +487,8 @@ def Register_Script(os_fullname):
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         fo.close()
+
+        printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
     
     elif os_fullname == "Windows Server 2016 Standard":
         
@@ -394,6 +499,8 @@ def Register_Script(os_fullname):
 
         fo.close()
 
+        printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
+
     elif os_fullname == "Windows Serer 2019 Standard":
         
         file_exist_check(scr_path,"scripts.ini")
@@ -403,6 +510,7 @@ def Register_Script(os_fullname):
 
         fo.close()
 
+        printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
 def Register_Script_Mssql(os_fullname):
 
@@ -420,17 +528,10 @@ def Register_Script_Mssql(os_fullname):
             if e%2 == 1:  
                 print("*" + win_2012_r2_std_scripts_mssql[e] + "- 등록 완료")
                 time.sleep(1)
-        """       
-        time.sleep(1)
-        print("*window2012std_init_script.bat - 등록 완료")
-        time.sleep(1)
-        print("*ktconf.bat - 등록 완료")
-        time.sleep(1)
-        print("*WindowUserdataExecutor_powershell.bat - 등록 완료")
-        time.sleep(1)
-        """
 
         fo.close()
+
+        printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
     elif os_fullname == "Windows Server 2012 R2 Standard":
         
@@ -441,6 +542,8 @@ def Register_Script_Mssql(os_fullname):
 
         fo.close()
 
+        printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
+
     elif os_fullname == "Windows Server 2016 Standard":
        
         file_exist_check(scr_path,"scripts.ini")
@@ -449,6 +552,8 @@ def Register_Script_Mssql(os_fullname):
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         fo.close()
+
+        printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
     
     elif os_fullname == "Windows Serer 2019 Standard":
         
@@ -458,6 +563,8 @@ def Register_Script_Mssql(os_fullname):
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
 
         fo.close()
+
+        printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
 def download_mssql_Allneed(version, edition):
 
@@ -471,6 +578,7 @@ def download_mssql_Allneed(version, edition):
     file_name1 = "autoinstall.bat"
     file_name2 = "ktconf.bat"
 
+    check_flag = 1
     
     ######자동설치 스크립트 복사######
     make_dir(dest_path1 + '/script')
@@ -478,30 +586,65 @@ def download_mssql_Allneed(version, edition):
         
         #print(scf)
         #print(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + scf)
-        wget.download(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + scf , dest_path1 + "/script", bar = bar_custom)
-        print(" GET " + scf)
+        flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + scf , dest_path1 + "/script")
+        if flg == 1 :
+            printcmd(" GET " + scf)
+        
+        else :
+            printcmd("ERROR : " + scf + "파일을 다운로드하지 못했습니다.")
+
+        check_flag &= flg
+        time.sleep(0.5)
 
     make_dir(dest_path1 + '/script/kt')    
     for ktf in file_inKT:
 
-        wget.download(mssql_path + "/" + "mssql" + version + edition + "/script/kt" + "/" + ktf , dest_path1 + "/script/kt", bar = bar_custom)
-        print(" GET " + ktf)
+        flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/script/kt" + "/" + ktf , dest_path1 + "/script/kt")       
+        if flg == 1 :
+            printcmd(" GET " + ktf)
+        
+        else :
+            printcmd("ERROR : " + ktf + "파일을 다운로드하지 못했습니다.")
 
-    print("GET script Directory")
+        check_flag &= flg
+
+        time.sleep(0.5)
+
+    if check_flag == 1 :
+        printcmd("GET script Directory!")
+    else :
+        printcmd("ERROR : CANNOT GET script Directory!")
 
     time.sleep(1)
 
     file_exist_check(dest_path1,file_name1)
-    wget.download(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + file_name1, dest_path1, bar = bar_custom)
-    print(" GET ",file_name1)
+    flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/script" + "/" + file_name1, dest_path1)
+    
+    if flg == 1:
+        printcmd(" GET " + file_name1)
+    else :
+        printcmd("ERROR : " + filename1 + "파일을 다운로드하지 못했습니다.")
+
+    check_flag &= flg
 
     time.sleep(1)
 
     ######자동설치 script 실행 파일 등록######
     file_exist_check(dest_path2,file_name2)
-    wget.download(mssql_path + "/" + "mssql" + version + edition + "/" + file_name2, dest_path2, bar = bar_custom)
-    print(" GET ",file_name2)
+    flg = wgets(mssql_path + "/" + "mssql" + version + edition + "/" + file_name2, dest_path2)
 
+    if flg == 1:
+        printcmd(" GET " + file_name2)
+    else :
+        printcmd("ERROR : " + file_name2 + "파일을 다운로드하지 못했습니다.")
+
+    check_flag &= flg
+    time.sleep(1)
+
+    if check_flag == 1:
+        printcmd(">> 자동 설치 Script 실행파일이 모두 정상적으로 등록되었습니다.")
+    else :
+        printcmd("ERROR : 자동 설치 Script 실행파일 등록 중 오류가 발생했습니다.")
 
 def Copy_And_Register_AutoExecScript(mssql_version, mssql_edition) :
     
@@ -514,7 +657,7 @@ def Copy_And_Register_AutoExecScript(mssql_version, mssql_edition) :
         elif mssql_edition == "Enterprise Edition" :
 
             download_mssql_Allneed("2012","ent")
-    """
+    
     elif mssql_version == "SQL Server 2014" :
         
         if mssql_edition == "Standard Edition" :
@@ -544,16 +687,17 @@ def Copy_And_Register_AutoExecScript(mssql_version, mssql_edition) :
         elif mssql_edition == "Enterprise Edition" :
 
             download_mssql_Allneed("2019","ent")
-    """
+    
 
 def Stop_Cloud_Service() :
     
-    #commandstr = "Set-Service -Name 'Cloud.com Instance Manager' -Status stopped -Force -StartupType Manual"
     commandstr1 = "set-service -Name 'Cloud.com Instance Manager' -StartupType Manual"
     subprocess.call(["powershell",commandstr1],shell = True)
     
     commandstr2 = "stop-service -Name 'Cloud.com Instance Manager'"
     subprocess.call(["powershell",commandstr2],shell = True)
+
+    printcmd(">> Cloud.com 서비스가 중지되었습니다.")
 
 def Copy_Mssql_Install_Check_File() :
 
@@ -563,11 +707,19 @@ def Copy_Mssql_Install_Check_File() :
 
     ######Mssql install check 파일 복사######
     file_exist_check(dest_path3,file_name3)
-    wget.download(mssql_path + "/" + file_name3, dest_path3, bar = bar_custom)
-    print(" GET ",file_name3)
+    flg = wgets(mssql_path + "/" + file_name3, dest_path3)
+    
+    if flg == 1 :
+        printcmd(" GET " + file_name3)
+        printcmd(">> Mssql install check 파일이 정상적으로 등록되었습니다.")
+
+    else :
+        printcmd("ERROR : " + file_name3 + "파일을 다운로드하지 못했습니다.")
 
 def Sysprep(os_fullname) :
 
+
+    check_flag = 1
 
     if os_fullname == "Windows Server 2012 Standard" :
 
@@ -577,9 +729,15 @@ def Sysprep(os_fullname) :
 
         file_exist_check(dest_path,file_name)
 
-        wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
-    
+        flg = wgets(base_path + uni_path, dest_path)
+
+        if flg == 1:
+            printcmd(" GET " + file_name)
+        else:
+            printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
+        
+        check_flag &= flg
+            
     elif os_fullname == "Windows Server 2012 R2 Standard" :
 
         uni_path = "/Sysprep/2012/2012R2/sysprep2012r2/unattend-kor.xml"
@@ -588,9 +746,15 @@ def Sysprep(os_fullname) :
 
         file_exist_check(dest_path,file_name)
 
-        wget.download(base_path + uni_path, dest_path, bar = bar_custom)
+        flg = wgets(base_path + uni_path, dest_path)
         os.rename(dest_path + "/" + "unattend-kor.xml", dest_path + "/" + file_name)
-        print(" GET ",file_name)
+
+        if flg == 1:
+            printcmd(" GET " + file_name)
+        else:
+            printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
+
+        check_flag &= flg
     
     elif os_fullname == "Windows Server 2016 Standard" :
 
@@ -600,8 +764,14 @@ def Sysprep(os_fullname) :
 
         file_exist_check(dest_path,file_name)
 
-        wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        flg = wgets(base_path + uni_path, dest_path)
+
+        if flg == 1:
+            printcmd(" GET " + file_name)
+        else:
+            printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
+        
+        check_flag &= flg
 
     elif os_fullname == "Windows Serer 2019 Standard":
 
@@ -611,12 +781,26 @@ def Sysprep(os_fullname) :
 
         file_exist_check(dest_path,file_name)
 
-        wget.download(base_path + uni_path, dest_path, bar = bar_custom)
-        print(" GET ",file_name)
+        flg = wgets(base_path + uni_path, dest_path)
 
-    tmp = os.getcwd()
-    filepath = tmp + "\\sysprepEx.ps1"
-    sysprepEx_info = run(filepath)
+        if flg == 1:
+            printcmd(" GET " + file_name)
+        else:
+            printcmd("ERROR : " + file_name + "파일을 다운로드하지 못했습니다.")
+        
+        check_flag &= flg
+
+
+    if check_flag == 1:
+
+        printcmd("Sysprep을 실행합니다.")
+        tmp = os.getcwd()
+        filepath = tmp + "\\sysprepEx.ps1"
+        sysprepEx_info = run(filepath)
+    
+    else:
+
+        printcmd("Sysprep을 실행할 수 없습니다.")
 
     """
     time.sleep(2)
@@ -695,15 +879,24 @@ if __name__ == "__main__":
 
     os_name = platform.system()
 
+    print("OS : " + os_name)
     if os_name == "Windows" :
 
         os_fullname = get_winos_fullname()
         mssql_name = check_mssql()
         
         mssql_version = mssql_name[0]
-        mssql_edition = mssql_name[1]
 
-        print("============================= 취약점 조치 시작 =============================")
+        if mssql_version == "null":
+            mssql_edition = "null"
+        else :
+            mssql_edition = mssql_name[1]
+    
+        print("WINDOW VERSION : " + os_fullname)
+        print("MSSQL VERSION : " + mssql_version)
+        print("MSSQL EDITION : " + mssql_edition)
+        
+        print("\n============================= 취약점 조치 시작 =============================\n")
         
         
         netBios_TCPIP_Off()
@@ -712,16 +905,14 @@ if __name__ == "__main__":
         stopShare()
         stop445port()
         addEnabledReg()
-        
 
-        print("============================= 취약점 조치 완료 =============================")
+        print("\n============================= 취약점 조치 완료 =============================\n")
         make_dir(initscr_path + '\Scripts')
 
         if mssql_version == "null" : ## **NOT MSSQL** ##
         
             print("******Window******")
 
-            print("WINDOW OS VERSION :",os_fullname)
             #Copy_UerdataExcutor()
             #Copy_And_Execute_TimeSettingScript()
             #Copy_SynctimeScript
@@ -735,68 +926,53 @@ if __name__ == "__main__":
             
             print("******Window + Mssql******")
 
-            print("WINDOW OS VERSION :",os_fullname)
-            print("MSSQL VERSION :",mssql_version)
-            print("MSSQL EDITION :",mssql_edition)
-
             make_dir('C:/Windows/mssql')
             
-
             print("Loading...")
-            time.sleep(3)
+            time.sleep(1.5)
             Copy_And_Register_AutoExecScript(mssql_version, mssql_edition)
-            print("> 자동 설치 Script 실행파일이 모두 정상적으로 등록되었습니다.")
-
 
             print("Loading...")
             time.sleep(1.5)
             Copy_UerdataExcutor()
-            print("> UserdataExecutor스크립트 파일이 모두 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Copy_SynctimeScript()
-            print("> Time 동기화 스크립트 파일이 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Copy_And_Execute_TimeSettingScript()
-            print("> TimeSetting 스크립트 파일이 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Check_Firewall()
-            print("> 윈도우 방화벽 설정이 모두 OFF로 설정되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Copy_InitScript()
-            print("> Init 스크립트 파일이 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Copy_WinInitScript(os_fullname)
-            print("> WindowInitScript파일이 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Register_Script_Mssql(os_fullname)
-            print("> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Stop_Cloud_Service()
-            print("> Cloud.com 서비스가 중지되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
             Copy_Mssql_Install_Check_File()
-            print("Mssql install check 파일이 정상적으로 등록되었습니다.")
 
             print("Loading...")
             time.sleep(1.5)
-            #Sysprep(os_fullname)
-
+            Sysprep(os_fullname)
+            printcmd(">> Sysprep 실행이 종료되었습니다.")
+            
 
     """
     elif os_name == "Ubuntu" : ##우분투 Linux##

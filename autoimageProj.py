@@ -8,7 +8,7 @@ import shutil
 import stat
 import time
 import winreg as reg
-import math
+import math,re
 import logging
 from tqdm import tqdm
 from subprocess import Popen
@@ -279,6 +279,29 @@ def check_mssql() :
     return mssql_name
     #print(mssql_name)
 
+def gptVer_update() :
+
+    gpt_path = "C:/Windows/System32/GroupPolicy"
+
+    fgpt = open(gpt_path + "/" + "gpt.ini","r")
+    content = fgpt.readlines()
+    idx = 0
+    for line in content:
+
+        if line.startswith("Version"):
+
+            vn = re.findall("\d+",line)
+            uvn = str(int(vn[0]) + 2)
+            
+            content[idx] = "Version="+uvn
+
+        idx = idx+1       
+
+    with open(gpt_path + "/" + "gpt.ini","w") as fw:
+        fw.writelines(content)
+        
+    fgpt.close()
+
 def Copy_UerdataExcutor() :
 
     uni_pathb = "/UserDataExecutor/WindowsUserdataExecutor_powershell.bat"
@@ -483,7 +506,7 @@ def Register_Script(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
     elif os_fullname == "Windows Server 2012 R2 Standard":
@@ -500,7 +523,7 @@ def Register_Script(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
     
     elif os_fullname == "Windows Server 2016 Standard":
@@ -517,7 +540,7 @@ def Register_Script(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
     elif os_fullname == "Windows Serer 2019 Standard":
@@ -534,7 +557,7 @@ def Register_Script(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 3개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
 def Register_Script_Mssql(os_fullname):
@@ -557,6 +580,7 @@ def Register_Script_Mssql(os_fullname):
                 time.sleep(1)
 
         fo.close()
+        gptVer_update()
 
         printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
@@ -574,6 +598,7 @@ def Register_Script_Mssql(os_fullname):
                 time.sleep(1)
 
         fo.close()
+        gptVer_update()
 
         printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
@@ -591,7 +616,7 @@ def Register_Script_Mssql(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
     
     elif os_fullname == "Windows Serer 2019 Standard":
@@ -608,7 +633,7 @@ def Register_Script_Mssql(os_fullname):
                 time.sleep(1)
 
         fo.close()
-
+        gptVer_update()
         printcmd(">> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.")
 
 def download_mssql_Allneed(version, edition):
@@ -945,14 +970,13 @@ if __name__ == "__main__":
         
         print("\n============================= 취약점 조치 시작 =============================\n")
         
-        
         netBios_TCPIP_Off()
         SAM_rmUser()
         SAM_accPolicy_On()
         stopShare()
         stop445port()
         addEnabledReg()
-
+        
         print("\n============================= 취약점 조치 완료 =============================\n")
         make_dir(initscr_path + '\Scripts')
 

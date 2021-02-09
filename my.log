@@ -1,0 +1,256 @@
+True
+11.3.6020.0
+SQL Server 2012
+Standard Edition
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=0
+
+
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=1
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=2
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=3
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=4
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=5
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=6
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=7
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=8
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=9
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=10
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=12
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 84
+PSComputerName   : 
+
+\\WIN-9C3NNF2U00P\root\cimv2:Win32_NetworkAdapterConfiguration.Index=14
+__GENUS          : 2
+__CLASS          : __PARAMETERS
+__SUPERCLASS     : 
+__DYNASTY        : __PARAMETERS
+__RELPATH        : 
+__PROPERTY_COUNT : 1
+__DERIVATION     : {}
+__SERVER         : 
+__NAMESPACE      : 
+__PATH           : 
+ReturnValue      : 0
+PSComputerName   : 
+
+
+
+SYSTEM
+Administrators
+                                                                           
+작업을 성공적으로 완료했습니다.
+자세한 정보는 %windir%\security\logs\scesrv.log를 참조하십시오.
+5퍼센트 완료됨(0/18) 	보안 정책 프로세스 영역        22퍼센트 완료됨(3/18) 	보안 정책 프로세스 영역        44퍼센트 완료됨(7/18) 	보안 정책 프로세스 영역        61퍼센트 완료됨(10/18) 	보안 정책 프로세스 영역        77퍼센트 완료됨(13/18) 	보안 정책 프로세스 영역        100퍼센트 완료됨(18/18) 	보안 정책 프로세스 영역                                                                                   
+작업을 성공적으로 완료했습니다.
+자세한 정보는 %windir%\security\logs\scesrv.log를 참조하십시오.
+shared folders : 
+
+Name                                                     ScopeName                                               Path                                                    Description                                            
+----                                                     ---------                                               ----                                                    -----------                                            
+IPC$                                                     *                                                                                                               원격 IPC                                               
+
+
+445
+RC4 128/128
+RC4 40/128
+RC4 56/128
+Triple DES 168
+SSL 2.0
+SSL 3.0
+모두 중지되었습니다.
+2021-02-02 23:34:11,983 - my - DEBUG - >> AutoShareServer 레지스트리 값이 0으로 설정되었습니다.
+2021-02-02 23:34:13,413 - my - DEBUG - >> 445포트 차단 조치가 완료되었습니다.(재부팅시 포트 차단 완료)
+2021-02-02 23:34:13,704 - my - DEBUG - >> 프로토콜 레지스트리와 취약 알고리즘 레지스트리가 모두 비활성되었습니다.
+2021-02-02 23:34:13,831 - my - DEBUG -  GET autoinstall.bat
+2021-02-02 23:34:13,847 - my - DEBUG -  GET head.bat
+2021-02-02 23:34:13,864 - my - DEBUG -  GET main.bat
+2021-02-02 23:34:13,880 - my - DEBUG -  GET Readme.txt
+2021-02-02 23:34:13,905 - my - DEBUG -  GET Microsoft.VC90.CRT.manifest
+2021-02-02 23:34:13,942 - my - DEBUG -  GET msvcm90.dll
+2021-02-02 23:34:14,014 - my - DEBUG -  GET msvcr90.dll
+2021-02-02 23:34:14,065 - my - DEBUG -  GET msvcp90.dll
+2021-02-02 23:34:14,080 - my - DEBUG -  GET UcloudService.exe
+2021-02-02 23:34:14,243 - my - DEBUG -  GET Ucloud.dll
+2021-02-02 23:34:14,267 - my - DEBUG -  GET mssqlConfig.log
+2021-02-02 23:34:14,288 - my - DEBUG - GET script Directory!
+2021-02-02 23:34:15,300 - my - DEBUG -  GET autoinstall.bat
+2021-02-02 23:34:16,314 - my - DEBUG -  GET ktconf.bat
+2021-02-02 23:34:17,320 - my - DEBUG - >> 자동 설치 Script 실행파일이 모두 정상적으로 등록되었습니다.
+2021-02-02 23:34:17,335 - my - DEBUG -  GET WindowsUserdataExecutor_powershell.bat
+2021-02-02 23:34:18,367 - my - DEBUG -  GET uerdataexecutor.ps1
+2021-02-02 23:34:18,367 - my - DEBUG - >> UserdataExecutor스크립트 파일이 모두 정상적으로 등록되었습니다.
+2021-02-02 23:34:18,382 - my - DEBUG -  GET SetupComplete.cmd
+2021-02-02 23:34:18,382 - my - DEBUG - >> Init 스크립트 파일이 정상적으로 등록되었습니다.
+2021-02-02 23:34:18,398 - my - DEBUG -  GET window2012std_init_script.bat
+2021-02-02 23:34:18,398 - my - DEBUG - >> WindowInitScript파일이 정상적으로 등록되었습니다.
+2021-02-02 23:34:18,422 - my - DEBUG -  GET time.bat
+2021-02-02 23:34:18,422 - my - DEBUG - >> Time 동기화 스크립트 파일이 정상적으로 등록되었습니다.
+2021-02-02 23:34:18,438 - my - DEBUG -  GET mssql_install_check.vbs
+2021-02-02 23:34:18,438 - my - DEBUG - >> Mssql install check 파일이 정상적으로 등록되었습니다.
+2021-02-02 23:34:18,454 - my - DEBUG - >> TimeSetting 스크립트 파일이 정상적으로 등록되었습니다.
+2021-02-02 23:34:21,553 - my - DEBUG - RUN TimeSetting.bat SUCCESS
+2021-02-02 23:34:21,728 - my - DEBUG - >> 윈도우 방화벽 설정이 모두 OFF로 설정되었습니다.
+2021-02-02 23:34:22,185 - my - DEBUG - >> Cloud.com 서비스가 중지되었습니다.
+2021-02-02 23:34:22,216 - my - DEBUG - *0CmdLine=C:\Windows\Setup\Scripts\SetupComplete.cmd
+- 등록 완료
+2021-02-02 23:34:23,227 - my - DEBUG - *1CmdLine=C:\Windows\Setup\Scripts\window2012std_init_script.bat
+- 등록 완료
+2021-02-02 23:34:24,234 - my - DEBUG - *2CmdLine=C:\Windows\System32\GroupPolicy\Machine\Scripts\Startup\ktconf.bat
+- 등록 완료
+2021-02-02 23:34:25,242 - my - DEBUG - *3CmdLine=C:\Windows\Setup\Scripts\WindowsUserdataExecutor_powershell.bat
+- 등록 완료
+2021-02-02 23:34:26,252 - my - DEBUG - >> 4개의 스크립트 파일이 시작 프로그램 스크립트 파일로 등록되었습니다.
+2021-02-02 23:34:26,268 - my - DEBUG - >> Sysprep 실행이 종료되었습니다.

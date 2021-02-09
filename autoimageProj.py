@@ -105,7 +105,7 @@ def netBios_TCPIP_Off():
         #print("취약점 조치1 command executed successfully!")
         printcmd(">> 'NetBIOS over TCP/IP' -> '사용안함' 으로 설정되었습니다.")
         
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("=======================================================================")
     
 
@@ -125,7 +125,7 @@ def SAM_rmUser():
         #print("취약점 조치2 command executed successfully!")
         printcmd(">> SAM파일 내 불필요한 사용자 그룹이 모두 삭제되었습니다.")
     
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
 
@@ -146,10 +146,10 @@ def SAM_accPolicy_On():
     else:
         #print("취약점 조치3 command executed successfully!")
         printcmd(">> 'SAM 계정과 공유의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
-        time.sleep(1.5)
+        time.sleep(0.01)
         printcmd(">> 'SAM 계정의 익명 열거 허용안함' -> '사용' 으로 설정되었습니다.")
     
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
 
@@ -171,7 +171,7 @@ def stopShare():
         #print("취약점 조치4-1 command executed successfully!")
         printcmd(">> 공유 폴더 내 불필요한 공유 설정이 모두 중지되었습니다.")
 
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
     assReg = "REG ADD HKLM\\System\\CurrentControlSet\\Services\\LanmanServer\\parameters /v AutoShareServer /t REG_DWORD /d 0 /f"
@@ -184,7 +184,7 @@ def stopShare():
         #print("취약점 조치4-2 command executed successfully!")
         printcmd(">> AutoShareServer 레지스트리 값이 0으로 설정되었습니다.")
 
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
 
@@ -205,7 +205,7 @@ def stop445port():
         #print("취약점 조치5 command executed successfully!")
         printcmd(">> 445포트 차단 조치가 완료되었습니다.(재부팅시 포트 차단 완료)")
 
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
 
@@ -225,7 +225,7 @@ def addEnabledReg() :
         #print("취약점 조치6 command executed successfully!")
         printcmd(">> 프로토콜 레지스트리와 취약 알고리즘 레지스트리가 모두 비활성되었습니다.")
     
-    time.sleep(1.5)
+    time.sleep(0.01)
     #print("-------------------------")
 
 ################################################################################################################################################
@@ -366,8 +366,8 @@ def Copy_And_Execute_TimeSettingScript() :
     ######timeSetting.bat파일 1회실행######
     
     #time_info = subprocess.call(["powershell","Start-Process -FilePath C:\\Windows\\timeSetting.bat"],shell=True)
-    time_info = subprocess.run([r'C:\\Windows\\timeSetting.bat'])
-    
+
+    time_info = subprocess.run(r'C:\\Windows\\timeSetting.bat')#, stdout=txtlog)
     if(time_info.returncode != 0):
         printcmd("RUN TimeSetting.bat ERROR")
     else:
@@ -570,8 +570,6 @@ def Register_Script_Mssql(os_fullname):
         fo = open(scr_path + "/" + "scripts.ini","w")
         fo.writelines(win_2012_std_scripts_mssql)
         fo = os.popen('attrib +h ' + scr_path + "/" + "scripts.ini")
-        #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_HIDDEN)
-        #os.chmod(scr_path + "/" + "scripts.ini" ,stat.FILE_ATTRIBUTE_READONLY)
 
         for e in tqdm(range(9)) :
 
@@ -665,7 +663,7 @@ def download_mssql_Allneed(version, edition):
             printcmd("ERROR : " + scf + "파일을 다운로드하지 못했습니다.")
 
         check_flag &= flg
-        time.sleep(0.5)
+        time.sleep(0.01)
 
     make_dir(dest_path1 + '/script/kt')    
     for ktf in file_inKT:
@@ -680,7 +678,7 @@ def download_mssql_Allneed(version, edition):
 
         check_flag &= flg
 
-        time.sleep(0.5)
+        time.sleep(0.01)
 
     if check_flag == 1 :
         printcmd("GET script Directory!")
@@ -949,6 +947,8 @@ def centos_setting() :
 
 if __name__ == "__main__":
 
+    start = time.time()
+
     os_name = platform.system()
 
     print("OS : " + os_name)
@@ -964,9 +964,9 @@ if __name__ == "__main__":
         else :
             mssql_edition = mssql_name[1]
     
-        print("WINDOW VERSION : " + os_fullname)
-        print("MSSQL VERSION : " + mssql_version)
-        print("MSSQL EDITION : " + mssql_edition)
+        print("WINDOW VERSION: " + os_fullname)
+        print("MSSQL VERSION: " + mssql_version)
+        print("MSSQL EDITION: " + mssql_edition)
         
         print("\n============================= 취약점 조치 시작 =============================\n")
         
@@ -985,35 +985,35 @@ if __name__ == "__main__":
             print("******Window******")
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_UerdataExcutor()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_And_Execute_TimeSettingScript()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_SynctimeScript()
             
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Check_Firewall()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_InitScript()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_WinInitScript(os_fullname)
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Register_Script(os_fullname)
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Sysprep(os_fullname)
             printcmd(">> Sysprep 실행이 종료되었습니다.")
 
@@ -1025,49 +1025,52 @@ if __name__ == "__main__":
             make_dir('C:/Windows/mssql')
             
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_And_Register_AutoExecScript(mssql_version, mssql_edition)
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_UerdataExcutor()
 
             print("Loading...")
-            time.sleep(1.5)
-            Copy_SynctimeScript()
-
-            print("Loading...")
-            time.sleep(1.5)
-            Copy_And_Execute_TimeSettingScript()
-
-            print("Loading...")
-            time.sleep(1.5)
-            Check_Firewall()
-
-            print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_InitScript()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_WinInitScript(os_fullname)
 
             print("Loading...")
-            time.sleep(1.5)
-            Register_Script_Mssql(os_fullname)
+            time.sleep(0.01)
+            Copy_SynctimeScript()
 
             print("Loading...")
-            time.sleep(1.5)
-            Stop_Cloud_Service()
-
-            print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
             Copy_Mssql_Install_Check_File()
 
             print("Loading...")
-            time.sleep(1.5)
+            time.sleep(0.01)
+            Copy_And_Execute_TimeSettingScript()
+
+            print("Loading...")
+            time.sleep(0.01)
+            Check_Firewall()
+
+            print("Loading...")
+            time.sleep(0.01)
+            Stop_Cloud_Service()
+
+            print("Loading...")
+            time.sleep(0.01)
+            Register_Script_Mssql(os_fullname)
+
+
+            print("Loading...")
+            time.sleep(0.01)
             Sysprep(os_fullname)
             printcmd(">> Sysprep 실행이 종료되었습니다.")
+
+            print("\nRunning time: %dm%ds" %((time.time() - start)/60, (time.time() - start)%60))
             
 
     """
